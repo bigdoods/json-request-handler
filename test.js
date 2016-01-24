@@ -68,31 +68,23 @@ tape('processes a JSON body', function (t) {
 })
 
 
-tape('processes a JSON body', function (t) {
+tape('handles an error via response', function (t) {
 
   var testServer = null
   var collectedJSON = null
   var collectedRes = null
-  var testJSON = {
-    fruit:'apples',
-    height:10
-  }
-  var testJSONString = JSON.stringify(testJSON)
+  var testJSONString = '{"fruit":"apples", "val":45 8}'
 
   async.series([
 
     function(next){
 
-      jsonRequest(10, 15)
-
-      var successHandler = function(req, res){
+      var handler = jsonRequest(function(req, res){
 
         collectedJSON = req.jsonBody
         res.end('ok')
 
-      }
-
-      var handler = jsonRequest(successHandler)
+      })
 
       testServer = http.createServer(handler)
 
@@ -110,11 +102,14 @@ tape('processes a JSON body', function (t) {
         method:'POST'
       })
 
+      req.on('response', function(res){
+        t.equal(res.statusCode, 500)
+      })
+
       from(testJSONString).pipe(req).pipe(concat(function(data){
 
-        t.equal(data.toString(), 'ok')
-        t.deepEqual(testJSON, collectedJSON)
-        collectedRes = data
+        t.equal(data.toString(), 'SyntaxError: Unexpected number')
+        
         next()
       }))
     },
