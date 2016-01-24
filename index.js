@@ -1,7 +1,7 @@
 var concat = require('concat-stream')
 
 module.exports = function(handlerfunction, errorfn){
-  return function(req, res, opts, cb){
+  return function(req, res){
       
     req.pipe(concat(function(body){
 
