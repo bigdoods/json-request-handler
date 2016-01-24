@@ -4,6 +4,7 @@ var jsonRequest = require('./index')
 var http = require('http')
 var from = require('from2-string')
 var hyperquest = require('hyperquest')
+var hyperrequest = require('hyperrequest');
 var concat = require('concat-stream')
 
 tape('processes a JSON body', function (t) {
@@ -26,6 +27,7 @@ tape('processes a JSON body', function (t) {
 
 
         collectedJSON = req.jsonBody
+        res.setHeader('Content-type', 'text/plain')
         res.end('ok')
 
       })
@@ -41,18 +43,21 @@ tape('processes a JSON body', function (t) {
 
     function(next){
 
-      
-      var req = hyperquest('http://127.0.0.1:8089', {
-        method:'POST'
-      })
 
-      from(testJSONString).pipe(req).pipe(concat(function(data){
-
-        t.equal(data.toString(), 'ok')
+      hyperrequest({
+        url:'http://127.0.0.1:8089',
+        method: 'POST',
+        headers:{
+          "Content-type": "application/json"
+        },
+        json: testJSON
+      }, function(err, res){
+        t.equal(res.body, 'ok')
         t.deepEqual(testJSON, collectedJSON)
-        collectedRes = data
         next()
-      }))
+        
+      })
+      
     },
 
     function(next){
