@@ -1,6 +1,6 @@
 {
   "name": "json-request-handler",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A function to accept a JSON request http body",
   "main": "index.js",
   "scripts": {
