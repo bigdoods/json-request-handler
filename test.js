@@ -23,6 +23,8 @@ tape('processes a JSON body', function (t) {
 
       var handler = jsonRequest(function(req, res){
 
+        
+
         collectedJSON = req.jsonBody
         res.end('ok')
 

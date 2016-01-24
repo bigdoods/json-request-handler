@@ -2,6 +2,8 @@ var concat = require('concat-stream')
 
 module.exports = function(handlerfunction, errorfn){
   return function(req, res){
+
+    var args = Array.prototype.slice.call(arguments);
       
     req.pipe(concat(function(body){
 
@@ -21,7 +23,7 @@ module.exports = function(handlerfunction, errorfn){
 
       req.jsonBody = body
 
-      handlerfunction(req, res)
+      handlerfunction.apply(null, args)
       
     }))
   }
