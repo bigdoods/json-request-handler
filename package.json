@@ -1,0 +1,33 @@
+{
+  "name": "json-request-handler",
+  "version": "1.0.0",
+  "description": "A function to accept a JSON request http body",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jenca-cloud/json-request-handler.git"
+  },
+  "keywords": [
+    "JSON",
+    "request",
+    "HTTP"
+  ],
+  "author": "Jenca Cloud",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jenca-cloud/json-request-handler/issues"
+  },
+  "homepage": "https://github.com/jenca-cloud/json-request-handler",
+  "devDependencies": {
+    "async": "^1.5.0",
+    "hyperquest": "^1.2.0",
+    "tape": "^4.3.0",
+    "from2-string": "^1.1.0"
+  },
+  "dependencies": {
+    "concat-stream": "^1.5.1"
+  }
+}
