@@ -11,7 +11,9 @@ module.exports = function(handlerfunction, errorfn){
         body = JSON.parse(body.toString())
       } catch (e){
         if(errorfn){
-          errorfn(e)
+
+          var errorargs = [e.toString()].concat(args)
+          errorfn.apply(null, errorargs)
         }
         else
         {
