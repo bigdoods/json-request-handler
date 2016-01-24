@@ -66,3 +66,69 @@ tape('processes a JSON body', function (t) {
     t.end()
   })
 })
+
+
+tape('processes a JSON body', function (t) {
+
+  var testServer = null
+  var collectedJSON = null
+  var collectedRes = null
+  var testJSON = {
+    fruit:'apples',
+    height:10
+  }
+  var testJSONString = JSON.stringify(testJSON)
+
+  async.series([
+
+    function(next){
+
+      jsonRequest(10, 15)
+
+      var successHandler = function(req, res){
+
+        collectedJSON = req.jsonBody
+        res.end('ok')
+
+      }
+
+      var handler = jsonRequest(successHandler)
+
+      testServer = http.createServer(handler)
+
+      testServer.listen(8089, next)
+    },
+
+    function(next){
+      setTimeout(next, 100)
+    },
+
+    function(next){
+
+      
+      var req = hyperquest('http://127.0.0.1:8089', {
+        method:'POST'
+      })
+
+      from(testJSONString).pipe(req).pipe(concat(function(data){
+
+        t.equal(data.toString(), 'ok')
+        t.deepEqual(testJSON, collectedJSON)
+        collectedRes = data
+        next()
+      }))
+    },
+
+    function(next){
+      testServer.close(next)
+    }
+
+  ], function(err){
+    if(err){
+      t.error(err)
+      t.end()
+      return
+    }
+    t.end()
+  })
+})
